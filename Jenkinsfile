@@ -1,11 +1,34 @@
-node {
-	stage('Build') {
-		echo "Build"
-	}
-	stage('Test') {
-		echo "Test"
-	}
-	stage('Integration Test') {
-		echo "Test"
+/*//scripted
+node {	// node es el bloque que se ejecuta en un agente, es exclusivo de scripted, en scripted, un pipeline no tiene etapas, pero se pueden crear bloques de código que
+	echo "Build"
+	echo "Test"
+	echo "Test"
+}
+
+*/
+// hay 2 tipos de scripts en Jenkins: Declarative y Scripted
+// Declarative Pipeline es más fácil de leer y escribir, y es más adecuado para la mayoría de los casos de uso
+// Scripted Pipeline es más flexible y poderoso, pero es más difícil de leer y escribir
+// Declarative Pipeline es la forma recomendada de escribir pipelines en Jenkins
+
+//declarative
+pipeline {	// exclusivo de declarative, un pipeline es un bloque que contiene todo el pipeline, es un must
+	agent any	// cualquier agente disponible, esto puede ser un docker, un nodo, etc.
+	stages {	//en declarative, un pipeline tiene etapas, por esto se necesita el bloque stages, es un must
+		stage('Build') {	// cada etapa tiene un nombre, y dentro de cada etapa hay pasos, qe también son un must
+			steps {
+				echo "Build"
+			}
+		}
+		stage('Test') {
+			steps {
+				echo "Test"
+			}
+		}
+		stage('Integration Test') {
+			steps {
+				echo "Test"
+			}
+		}
 	}
 }
