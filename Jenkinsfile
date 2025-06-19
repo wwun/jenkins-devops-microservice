@@ -30,5 +30,15 @@ pipeline {	// exclusivo de declarative, un pipeline es un bloque que contiene to
 				echo "Test"
 			}
 		}
-	}
+	} post {
+		always {
+			echo "This will always run"
+		}
+		success {
+			echo "This will run only if the pipeline is successful"
+		}
+		failure {
+			echo "This will run only if the pipeline fails"
+		}
+	} // post es un bloque que se ejecuta al final del pipeline, y puede tener diferentes condiciones
 }
