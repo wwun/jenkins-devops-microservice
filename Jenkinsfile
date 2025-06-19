@@ -12,33 +12,34 @@ node {	// node es el bloque que se ejecuta en un agente, es exclusivo de scripte
 // Declarative Pipeline es la forma recomendada de escribir pipelines en Jenkins
 
 //declarative
-pipeline {	// exclusivo de declarative, un pipeline es un bloque que contiene todo el pipeline, es un must
-	agent any	// cualquier agente disponible, esto puede ser un docker, un nodo, etc.
-	stages {	//en declarative, un pipeline tiene etapas, por esto se necesita el bloque stages, es un must
-		stage('Build') {	// cada etapa tiene un nombre, y dentro de cada etapa hay pasos, qe también son un must
-			steps {
-				echo "Build"
-			}
-		}
-		stage('Test') {
-			steps {
-				echo "Test"
-			}
-		}
-		stage('Integration Test') {
-			steps {
-				echo "Test"
-			}
-		}
-	} post {
-		always {
-			echo "This will always run"
-		}
-		success {
-			echo "This will run only if the pipeline is successful"
-		}
-		failure {
-			echo "This will run only if the pipeline fails"
-		}
-	} // post es un bloque que se ejecuta al final del pipeline, y puede tener diferentes condiciones
+pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene todo el pipeline, es un must
+    agent any // cualquier agente disponible, esto puede ser un docker, un nodo, etc.
+    stages { // en declarative, un pipeline tiene etapas, por esto se necesita el bloque stages, es un must
+        stage('Build') { // cada etapa tiene un nombre, y dentro de cada etapa hay pasos, que también son un must
+            steps {
+                echo "Build"
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Test"
+            }
+        }
+        stage('Integration Test') {
+            steps {
+                echo "Integration Test"
+            }
+        }
+    }
+    post { // post es un bloque que se ejecuta al final del pipeline, y puede tener diferentes condiciones
+        always {
+            echo "This will always run"
+        }
+        success {
+            echo "This will run only if the pipeline is successful"
+        }
+        failure {
+            echo "This will run only if the pipeline fails"
+        }
+    }
 }
