@@ -78,8 +78,9 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
 			steps {
 				script {
 					docker.withRegistry('', 'docker.hub') { // se usa para autenticar el usuario de Docker Hub, en este caso, se usa el usuario wwun y la contraseña que se encuentra en las credenciales de Jenkins, fueron agregadas manualmente, el primer parámetro es la URL del registro, y el segundo es el ID de las credenciales de Jenkins
-					dockerImage.push() // se usa para subir la imagen de Docker al repositorio, en este caso, se sube la imagen de Docker al repositorio de Docker Hub
-					dockerImage.push("latest");
+						dockerImage.push() // se usa para subir la imagen de Docker al repositorio, en este caso, se sube la imagen de Docker al repositorio de Docker Hub
+						dockerImage.push("latest");
+					}
 				}
 			}
 		}
