@@ -17,7 +17,7 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
 	//agent {	// se especifica el agente que se va a usar, en este caso, un agente Docker, por esto, todo lo qe está dentro de stages se ejecutará dentro de un contenedor Docker
 		//docker { // se especifica que el agente es un docker, esto es exclusivo de declarative
 			//image 'maven:3.9.9' // se especifica la imagen de docker que se va a usar, en este caso, una imagen de node.js, si no se encuentra la imagen, se descargará desde Docker Hub
-			image 'node:20.16.0'
+			//image 'node:20.16.0'
 		//}
 		//Jenkins usará Docker para crear un contenedor basado en la imagen maven:3.9.9
 		//label 'docker' // se puede especificar un agente por etiqueta, en este caso, un agente con la etiqueta docker
@@ -29,7 +29,7 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
 				//sh 'mvn --version'
 				//sh 'node --version'
                 echo "Build"
-				echo "$PATH" // se puede acceder a las variables de entorno, en este caso, se imprime la variable PATH
+				echo "PATH - $PATH" // se puede acceder a las variables de entorno, en este caso, se imprime la variable PATH
 				echo "BUILD_NUMBER - $env.BUILD_NUMBER" // se puede acceder a las variables de entorno de Jenkins, en este caso, se imprime el número de construcción
 				echo "BUILD_ID = $env.BUILD_ID"
 				echo "BUILD_NAME = $env.BUILD_NAME"
