@@ -22,12 +22,19 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
 		//Jenkins usará Docker para crear un contenedor basado en la imagen maven:3.9.9
 		//label 'docker' // se puede especificar un agente por etiqueta, en este caso, un agente con la etiqueta docker
 	//}
+	environment { // se pueden definir variables de entorno, en este caso, se definen las rutas de las herramientas que se van a usar, como Docker y Maven
+		dockerHome = tool 'myDocker' // se puede usar la herramienta de Jenkins para definir la ruta de la herramienta, en este caso, la ruta de Docker, la qe fue creada desde el mismo jenkins
+		mavenHome = tool 'myMaven' // se puede usar la herramienta de Jenkins para definir la ruta de la herramienta, en este caso, la ruta de Maven
+		// la diferencia de este dockerHome con docker es que este es un alias, y se puede usar en cualquier parte del pipeline, mientras que docker es una variable de entorno que se define en el agente
+		PATH = "$dockerHome/bin:$mavenHome/bin:$PATH" // se puede modificar la variable PATH para incluir las rutas de las herramientas que se van a usar, en este caso, se incluye la ruta de Docker y Maven
+	}
     stages { // en declarative, un pipeline tiene etapas, por esto se necesita el bloque stages, es un must
         stage('Build') { // cada etapa tiene un nombre, y dentro de cada etapa hay pasos, que también son un must
             steps {
 				//echo "mvn --version" // se puede ejecutar un comando de shell, en este caso, se ejecuta el comando mvn --version
-				//sh 'mvn --version'
+				sh 'mvn --version'
 				//sh 'node --version'
+				sh 'docker --version' // se puede ejecutar un comando de shell, en este caso, se ejecuta el comando docker --version
                 echo "Build"
 				echo "PATH - $PATH" // se puede acceder a las variables de entorno, en este caso, se imprime la variable PATH
 				echo "BUILD_NUMBER - $env.BUILD_NUMBER" // se puede acceder a las variables de entorno de Jenkins, en este caso, se imprime el número de construcción
