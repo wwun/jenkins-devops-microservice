@@ -29,7 +29,7 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
 		PATH = "$dockerHome/bin:$mavenHome/bin:$PATH" // se puede modificar la variable PATH para incluir las rutas de las herramientas que se van a usar, en este caso, se incluye la ruta de Docker y Maven
 	}
     stages { // en declarative, un pipeline tiene etapas, por esto se necesita el bloque stages, es un must
-        stage('Build') { // cada etapa tiene un nombre, y dentro de cada etapa hay pasos, que también son un must
+        stage('Checkout'){ // se puede usar una etapa para hacer un checkout del código, en este caso, se hace un checkout del código desde el repositorio
             steps {
 				//echo "mvn --version" // se puede ejecutar un comando de shell, en este caso, se ejecuta el comando mvn --version
 				sh 'mvn --version'
@@ -42,16 +42,22 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
 				echo "BUILD_NAME = $env.BUILD_NAME"
 				echo "BUILD_TAG = $env.BUILD_TAG"
 				echo "BUILD_URL = $env.BUILD_URL"
+				//la diferencia entre sh y echo es que sh ejecuta un comando de shell, mientras que echo imprime un mensaje en la consola de Jenkins
             }
         }
+		stage('Build') { // cada etapa tiene un nombre, y dentro de cada etapa hay pasos, que también son un must
+			steps {
+				sh "mvn clean compile" // se puede ejecutar un comando de shell, en este caso, se ejecuta el comando mvn clean compile
+			}
+		}
         stage('Test') {
             steps {
-                echo "Test"
+                echo "mvn test"
             }
         }
         stage('Integration Test') {
             steps {
-                echo "Integration Test"
+                sh "mvn failsafe:integration-test failsafe:verify" // ambos comandos se usan para ejecutar pruebas de integración, el primero ejecuta las pruebas y el segundo verifica los resultados
             }
         }
     }
