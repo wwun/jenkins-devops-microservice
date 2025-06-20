@@ -58,8 +58,31 @@ pipeline { // exclusivo de declarative, un pipeline es un bloque que contiene to
         stage('Integration Test') {
             steps {
                 sh "mvn failsafe:integration-test failsafe:verify" // ambos comandos se usan para ejecutar pruebas de integración, el primero ejecuta las pruebas y el segundo verifica los resultados
+				//estas pruebas se ejecutan después de las pruebas unitarias, y se usan para verificar que el sistema funciona correctamente en un entorno de integración
+				//para ejecutar las pruebas de integración, se usa el plugin failsafe de Maven, que se encarga de ejecutar las pruebas de integración y verificar los resultados
+				//esto a su vez usa cucumber, que es un framework de pruebas de integración que se usa para escribir pruebas de aceptación en lenguaje natural
+				//cucumber se agrega en el pom.xml del proyecto, y se configura para que se ejecute después de las pruebas unitarias
+				//la configuración y las clases de prueba se encuentran en el directorio src/test/java, y las pruebas se ejecutan en el directorio target/failsafe-reports
             }
         }
+		stage("Build Docker image") {
+			steps {
+				//docker build -t wwun/currency-exchange-devops:$env.BUILD_TAG //esta línea se usa para construir una imagen de Docker, en este caso, se construye una imagen de Docker con el nombre wwun/currency-exchange-devops y la etiqueta del número de construcció
+				script{
+					dockerImage = docker.build("wwun/currency-exchange-devops:${env.BUILD_TAG}") //esta es otra manera de construir una imagen de Docker, en este caso, se construye una imagen de Docker con el nombre wwun/currency-exchange-devops y la etiqueta del número de construcción
+				}
+
+			}
+		}
+		stage("Push Docker image") {
+			steps {
+				script {
+					docker.withRegistry('', 'docker.hub') { // se usa para autenticar el usuario de Docker Hub, en este caso, se usa el usuario wwun y la contraseña que se encuentra en las credenciales de Jenkins, fueron agregadas manualmente, el primer parámetro es la URL del registro, y el segundo es el ID de las credenciales de Jenkins
+					dockerImage.push() // se usa para subir la imagen de Docker al repositorio, en este caso, se sube la imagen de Docker al repositorio de Docker Hub
+					dockerImage.push("latest");
+				}
+			}
+		}
     }
 	//Todo lo que está dentro del bloque stages (como Build, Test, Integration Test) se ejecutará dentro del contenedor Docker
     post { // post es un bloque que se ejecuta al final del pipeline, y puede tener diferentes condiciones
